@@ -27,6 +27,7 @@ bool init();
 SDL_Surface* loadImage(std::string, SDL_Color);
 bool loadFiles();
 void applySurface(int, int, SDL_Surface*, SDL_Surface*, SDL_Rect*);
+void handleMouseEvents();
 void cleanup();
 
 int main(int argc, char** argv)
@@ -37,6 +38,7 @@ int main(int argc, char** argv)
 		return 1;
 
 	bool toQuit = false;
+	bool isPlaying = false;
 
 	SetupGrid();
 	DrawGrid();
@@ -47,13 +49,16 @@ int main(int argc, char** argv)
 	{
 		while(SDL_PollEvent(&g_seEvent))
 		{
+			//handleMouseEvents();
 			if(g_seEvent.type == SDL_QUIT)
 			{
 				toQuit = true;
 			}
 		}
 
-		//update stuff goes here
+		//Update();
+		//if(isPlaying)
+		//	Play();
 	}
 
 	cleanup();
@@ -106,26 +111,6 @@ void DrawGrid()
 	alive.y = 0;
 	alive.w = cellWidth;
 	alive.h = cellHeight;
-
-	for(int r = 0; r < nRows; r++)
-	{
-		for(int c = 0; c < nColumns; c++)
-		{
-			//determine what color to fill the current cell with
-			if(g_grids[0][r][c])
-				currentClip = alive;
-			else 
-				currentClip = dead;
-
-			//apply the current cell to the screen
-			applySurface(offset.x, offset.y, g_ssSpriteSheet, g_ssScreen, &currentClip);
-
-			//increment horizontal offset
-			offset.x += cellWidth;
-		}
-		offset.x = 50;			 // after drawing a horizontal line, reset horizontal offset
-		offset.y += cellHeight; // increment vertical offset
-	}
 
 }
 
@@ -191,19 +176,29 @@ void applySurface(int x, int y, SDL_Surface* source, SDL_Surface* destination, S
 	SDL_BlitSurface(source, clip, destination, &offset);
 }
 
+void handleMouseEvents()
+{
+	//float PosX, PosY;
+
+	////if the user left clicks
+	//if(g_seEvent.type == SDL_MOUSEBUTTONDOWN && g_seEvent.button.button == SDL_BUTTON_LEFT)
+	//{
+	//	PosX = g_seEvent.button.x;
+	//	PosY = g_seEvent.button.y;
+
+	//	//make sure click was within the bounds of the grid
+	//	if(PosX >
+
+	//	PosX /= cellWidth;
+	//	PosY /= cellHeight;
+
+	//	//determine what cell was clicked
+
+	//}
+}
+
 void cleanup()
 {
-	for(int b = 0; b < nBuffers; b++)
-	{
-		for(int r = 0; r < nRows; r++)
-		{
-			delete [] g_grids[b][r];
-		}
-
-		delete [] g_grids[b];
-	}
-
-	delete [] g_grids;
 
 	SDL_FreeSurface(g_ssSpriteSheet);
 	SDL_Quit();							// quit SDL
