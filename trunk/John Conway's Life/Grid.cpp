@@ -29,7 +29,7 @@ Grid::Grid(): m_nBuffers(2),
 		}
 	}
 
-	//setup the offset for the display grid
+	// setup the offset for the display grid
 	m_srDisplayOffset.x = 50;
 	m_srDisplayOffset.y = 20;
 
@@ -38,6 +38,10 @@ Grid::Grid(): m_nBuffers(2),
 	m_srDisplayGrid.y = m_srDisplayOffset.y;
 	m_srDisplayGrid.w = 700;
 	m_srDisplayGrid.h = 500;
+
+	// setup the size of a cell
+	m_srCellSpecs.x = 11;
+	m_srCellSpecs.y = 10;
 }
 
 SDL_Surface* Grid::CreateDrawGrid(SDL_Surface* SpriteSheet, SDL_Surface* &Screen)
@@ -78,6 +82,36 @@ SDL_Surface* Grid::CreateDrawGrid(SDL_Surface* SpriteSheet, SDL_Surface* &Screen
 	return m_ssDisplaySurface;
 }
 
+void Grid::LocateAndFlipCell(float x, float y)
+{
+
+	//exit the function is user clicks out of bounds
+	if(x < m_srDisplayOffset.x || x > m_srDisplayGrid.w + m_srDisplayOffset.x ||
+		y < m_srDisplayOffset.y || y > m_srDisplayGrid.h + m_srDisplayOffset.y)
+	{
+		return;
+	}
+	else
+	{
+		SDL_Rect cellPos;
+
+		//determine the xy position of the cell that was clicked
+		x -= m_srDisplayOffset.x;
+		y -= m_srDisplayOffset.y;
+
+		x /= m_srCellSpecs.x;
+		y /= m_srCellSpecs.y;
+
+		cellPos.x = x;
+		cellPos.y = y;
+
+		//if current cell is set to true, set it to false, else set it to true
+		if(m_grids[0][cellPos.y][cellPos.x])
+			m_grids[0][cellPos.y][cellPos.x] = false;
+		else
+			m_grids[0][cellPos.y][cellPos.x] = true;
+	}
+}
 
 Grid::~Grid()
 {
