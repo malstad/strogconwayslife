@@ -1,7 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include "SDL.h"
+#include "MySDLFunctions.h"
 
 class Grid
 {
@@ -14,14 +14,14 @@ protected:
 	
 	bool*** m_grids;					// three dimensional array that stores bools
 	SDL_Rect m_srDisplayGrid;			// rect that will hold the display
-	SDL_Surface** m_ssDisplaySurface;	// display picture
+	SDL_Surface* m_ssDisplaySurface;	// display picture
 	SDL_Rect m_srDisplayOffset;			// how much the display rect will be offset
 
 
 
 public:
 	Grid();
-	SDL_Surface* CreateDrawGrid(SDL_Surface* SpriteSheet);
+	SDL_Surface* CreateDrawGrid(SDL_Surface* SpriteSheet, SDL_Surface* &Screen);
 	~Grid();
 };
 
