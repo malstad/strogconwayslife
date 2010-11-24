@@ -16,13 +16,17 @@ protected:
 	SDL_Rect m_srDisplayGrid;			// rect that will hold the display
 	SDL_Surface* m_ssDisplaySurface;	// display picture
 	SDL_Rect m_srDisplayOffset;			// how much the display rect will be offset
-
-
+	SDL_Rect m_srCellSpecs;				// dimensions of a single cell
 
 public:
 	Grid();
 	SDL_Surface* CreateDrawGrid(SDL_Surface* SpriteSheet, SDL_Surface* &Screen);
-	~Grid();
+	void LocateAndFlipCell(float x, float y);
+	//get functions
+	SDL_Rect getCellSpecs() { return m_srCellSpecs; }
+	SDL_Rect getMainRectOffset() { return m_srDisplayOffset; }
+	SDL_Rect getMainRect() { return m_srDisplayGrid; }
+	~Grid();							//destructor
 };
 
 #endif
