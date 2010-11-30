@@ -1,33 +1,38 @@
 #include "Grid.h"
+#include "Button.h"
 
 //globals
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 const int SCREEN_BPP = 32;
 SDL_Event g_seEvent;					// receives event information
+SDL_Surface* g_ssScreen = NULL;			// the main screen
+SDL_Rect g_srPlayButton;				// play button that starts the simulation
+SDL_Rect g_srStopButton;				// stop button that stops the simulation
 
 void handleMouseEvents(Grid &PlayingGrid);
+void Update(Grid &PlayingGrid, bool isPlaying);
 
 int main(int argc, char** argv)
 {
-	SDL_Surface* ssScreen = NULL;		// the main screen
 	SDL_Surface* ssSpriteSheet = NULL;	// surface that holds the sprite sheet for the cell
+	SDL_Surface* ssButtons = NULL;		// surface that holds the sprite sheet for the buttons
 
-	if(!init(ssScreen, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP))
+	//attempts to initialize SDL, and quits if failed
+	if(!init(g_ssScreen, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP))
 		return 1;
+	//attempts to load the sprite sheet and quit if that failed
 	ssSpriteSheet = loadFile("sprites.png");
-	if(NULL == ssSpriteSheet)
+	ssButtons = loadFile("buttons.png");			
+	if(NULL == ssSpriteSheet || NULL == ssButtons)
 		return 1;
 
 	bool toQuit = false;
 	bool isPlaying = false;
 	Grid PlayingGrid;
+	Button PlayButton(PLAY_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT);
+	Button StopButton(STOP_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT);
 	
-	//grid takes the sprite sheet and applies the grid to the screen
-	PlayingGrid.CreateDrawGrid(ssSpriteSheet, ssScreen);
-
-	SDL_Flip(ssScreen);
-
 	//main game loop
 	while(!toQuit)
 	{
@@ -40,11 +45,10 @@ int main(int argc, char** argv)
 				toQuit = true;
 			}
 		}
-		PlayingGrid.CreateDrawGrid(ssSpriteSheet, ssScreen);
-		SDL_Flip(ssScreen);
-
-		//Update();
-		//Draw();
+		PlayingGrid.Draw(ssSpriteSheet, g_ssScreen);
+		PlayButton.Draw(ssButtons, g_ssScreen);
+		StopButton.Draw(ssButtons, g_ssScreen);
+		Update(PlayingGrid, isPlaying);
 	}
 
 	SDL_FreeSurface(ssSpriteSheet);
@@ -64,7 +68,18 @@ void handleMouseEvents(Grid &PlayingGrid)
 		CoordX = g_seEvent.button.x;
 		CoordY = g_seEvent.button.y;
 
-		PlayingGrid.LocateAndFlipCell(CoordX, CoordY);
+		if(PlayingGrid.isWithinBounds(CoordX, CoordY))
+			PlayingGrid.LocateAndFlipCell(CoordX, CoordY);
 
 	}
+}
+
+void Update(Grid &PlayingGrid, bool isPlaying)
+{
+	if(isPlaying)
+	{
+		//PlayingGrid.PlayLife();
+	}
+
+	SDL_Flip(g_ssScreen);
 }

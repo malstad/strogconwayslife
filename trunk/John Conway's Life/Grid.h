@@ -20,8 +20,9 @@ protected:
 
 public:
 	Grid();
-	SDL_Surface* CreateDrawGrid(SDL_Surface* SpriteSheet, SDL_Surface* &Screen);
+	SDL_Surface* Draw(SDL_Surface* SpriteSheet, SDL_Surface* Screen);
 	void LocateAndFlipCell(float x, float y);
+	bool isWithinBounds(float x, float y);
 	//get functions
 	SDL_Rect getCellSpecs() { return m_srCellSpecs; }
 	SDL_Rect getMainRectOffset() { return m_srDisplayOffset; }
