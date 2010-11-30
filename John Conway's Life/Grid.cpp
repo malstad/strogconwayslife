@@ -44,7 +44,7 @@ Grid::Grid(): m_nBuffers(2),
 	m_srCellSpecs.y = 10;
 }
 
-SDL_Surface* Grid::CreateDrawGrid(SDL_Surface* SpriteSheet, SDL_Surface* &Screen)
+SDL_Surface* Grid::Draw(SDL_Surface* SpriteSheet, SDL_Surface* Screen)
 {
 	SDL_Rect dead, alive, currentClip;
 	
@@ -84,15 +84,6 @@ SDL_Surface* Grid::CreateDrawGrid(SDL_Surface* SpriteSheet, SDL_Surface* &Screen
 
 void Grid::LocateAndFlipCell(float x, float y)
 {
-
-	//exit the function is user clicks out of bounds
-	if(x < m_srDisplayOffset.x || x > m_srDisplayGrid.w + m_srDisplayOffset.x ||
-		y < m_srDisplayOffset.y || y > m_srDisplayGrid.h + m_srDisplayOffset.y)
-	{
-		return;
-	}
-	else
-	{
 		SDL_Rect cellPos;
 
 		//determine the xy position of the cell that was clicked
@@ -110,7 +101,17 @@ void Grid::LocateAndFlipCell(float x, float y)
 			m_grids[0][cellPos.y][cellPos.x] = false;
 		else
 			m_grids[0][cellPos.y][cellPos.x] = true;
+}
+
+bool Grid::isWithinBounds(float x, float y)
+{
+	if(x < m_srDisplayOffset.x || x > m_srDisplayGrid.w + m_srDisplayOffset.x ||
+		y < m_srDisplayOffset.y || y > m_srDisplayGrid.h + m_srDisplayOffset.y)
+	{
+		return false;
 	}
+
+	return true;
 }
 
 Grid::~Grid()
