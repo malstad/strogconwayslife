@@ -29,6 +29,9 @@ Grid::Grid(): m_nBuffers(2),
 		}
 	}
 
+	//load the file for the sprite sheet for a cell on the grid
+	m_ssCellSprites = loadFile("sprites.png");
+
 	// setup the offset for the display grid
 	m_srDisplayOffset.x = 50;
 	m_srDisplayOffset.y = 20;
@@ -44,7 +47,7 @@ Grid::Grid(): m_nBuffers(2),
 	m_srCellSpecs.y = 10;
 }
 
-SDL_Surface* Grid::Draw(SDL_Surface* SpriteSheet, SDL_Surface* Screen)
+void Grid::Draw(SDL_Surface* Screen)
 {
 	SDL_Rect dead, alive, currentClip;
 	
@@ -69,7 +72,7 @@ SDL_Surface* Grid::Draw(SDL_Surface* SpriteSheet, SDL_Surface* Screen)
 				currentClip = dead;
 
 			//apply the current cell to the screen
-			applySurface(m_srDisplayOffset.x, m_srDisplayOffset.y, SpriteSheet, Screen, &currentClip);
+			applySurface(m_srDisplayOffset.x, m_srDisplayOffset.y, m_ssCellSprites, Screen, &currentClip);
 
 			m_srDisplayOffset.x += m_cellWidth;	//increment horizontal offset
 		}
@@ -79,7 +82,7 @@ SDL_Surface* Grid::Draw(SDL_Surface* SpriteSheet, SDL_Surface* Screen)
 
 	m_srDisplayOffset.y = 20;					// after drawing all vertical lines, reset vertical offset
 
-	return m_ssDisplaySurface;
+	//return m_ssDisplaySurface;
 }
 
 void Grid::LocateAndFlipCell(float x, float y)
@@ -93,8 +96,8 @@ void Grid::LocateAndFlipCell(float x, float y)
 		x /= m_srCellSpecs.x;
 		y /= m_srCellSpecs.y;
 
-		cellPos.x = x;
-		cellPos.y = y;
+		cellPos.x = (Sint16)x;
+		cellPos.y = (Sint16)y;
 
 		//if current cell is set to true, set it to false, else set it to true
 		if(m_grids[0][cellPos.y][cellPos.x])
@@ -116,6 +119,7 @@ bool Grid::isWithinBounds(float x, float y)
 
 Grid::~Grid()
 {
+	//deletes the array
 	for(int b = 0; b < m_nBuffers; b++)
 	{
 		for(int r = 0; r < m_nRows; r++)
@@ -127,4 +131,7 @@ Grid::~Grid()
 	}
 
 	delete [] m_grids;
+
+
+	SDL_FreeSurface(m_ssCellSprites);
 }

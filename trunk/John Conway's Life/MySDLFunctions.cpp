@@ -1,9 +1,4 @@
-#ifndef MYSDLFUNCTIONS_H
-#define MYSDLFUNCTIONS_H
-
-#include <iostream>
-#include "SDL.h"
-#include "SDL_image.h"
+#include "MySDLFunctions.h"
 
 bool init(SDL_Surface* &screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int SCREEN_BPP)
 {
@@ -67,5 +62,3 @@ void applySurface(int x, int y, SDL_Surface* source, SDL_Surface* destination, S
 
 	SDL_BlitSurface(source, clip, destination, &offset);
 }
-
-#endif

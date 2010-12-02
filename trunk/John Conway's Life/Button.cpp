@@ -8,6 +8,8 @@ Button::Button(int buttonType, int ScreenWidth, int ScreenHeight)
 	//set the type of the button (play, stop)
 	type = buttonType;
 
+	SpriteSheet = loadFile("buttons.png");
+
 	//set the size of the button's box
 	width = 80;
 	height = 40;
@@ -36,7 +38,12 @@ Button::Button(int buttonType, int ScreenWidth, int ScreenHeight)
 	}
 }
 
-void Button::Draw(SDL_Surface* SpriteSheet, SDL_Surface* Screen)
+void Button::Draw(SDL_Surface* Screen)
 {
 	applySurface(xOffset, yOffset, SpriteSheet, Screen, &m_srClip[type]);
+}
+
+Button::~Button()
+{
+	SDL_FreeSurface(SpriteSheet);
 }

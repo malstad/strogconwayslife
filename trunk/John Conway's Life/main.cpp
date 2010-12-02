@@ -15,16 +15,9 @@ void Update(Grid &PlayingGrid, bool isPlaying);
 
 int main(int argc, char** argv)
 {
-	SDL_Surface* ssSpriteSheet = NULL;	// surface that holds the sprite sheet for the cell
-	SDL_Surface* ssButtons = NULL;		// surface that holds the sprite sheet for the buttons
 
 	//attempts to initialize SDL, and quits if failed
 	if(!init(g_ssScreen, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP))
-		return 1;
-	//attempts to load the sprite sheet and quit if that failed
-	ssSpriteSheet = loadFile("sprites.png");
-	ssButtons = loadFile("buttons.png");			
-	if(NULL == ssSpriteSheet || NULL == ssButtons)
 		return 1;
 
 	bool toQuit = false;
@@ -45,13 +38,12 @@ int main(int argc, char** argv)
 				toQuit = true;
 			}
 		}
-		PlayingGrid.Draw(ssSpriteSheet, g_ssScreen);
-		PlayButton.Draw(ssButtons, g_ssScreen);
-		StopButton.Draw(ssButtons, g_ssScreen);
+		PlayingGrid.Draw(g_ssScreen);
+		PlayButton.Draw(g_ssScreen);
+		StopButton.Draw(g_ssScreen);
 		Update(PlayingGrid, isPlaying);
 	}
 
-	SDL_FreeSurface(ssSpriteSheet);
 	SDL_Quit();
 	return 0;
 }
