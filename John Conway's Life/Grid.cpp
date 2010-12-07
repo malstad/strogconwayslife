@@ -32,7 +32,7 @@ Grid::Grid(): m_nBuffers(2),
 	}
 
 	//load the file for the sprite sheet for a cell on the grid
-	m_ssCellSprites = loadFile("newSprites.png");
+	m_ssCellSprites = loadFile("sprites.png");
 
 	// setup the offset for the display grid
 	m_srDisplayOffset.x = 50;
