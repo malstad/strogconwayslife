@@ -24,10 +24,9 @@ Button::Button(int buttonType, int ScreenWidth, int ScreenHeight)
 		xOffset = (ScreenWidth / 2) + width + 30; 
 		
 	}
-	 else
+	else
 	{
 		xOffset = ScreenWidth / 4;
-
 	}
 
 	//set the size and offset of each clip
