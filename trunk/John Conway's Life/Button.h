@@ -15,15 +15,17 @@ enum ButtonTypes
 class Button
 {
 private:
-	int xOffset, yOffset;
-	int width, height;
-	int type;
-	SDL_Surface* SpriteSheet;
-	SDL_Rect	 m_srClip[4];
+	int				xOffset, yOffset;
+	int				width, height;
+	int				type;
+	bool			isPressed;
+	SDL_Surface*	SpriteSheet;
+	SDL_Rect		m_srClip[4];
 
 public:
 	Button(int buttonType, int ScreenWidth, int ScreenHeight);
 	void Draw(SDL_Surface* Screen);
+	bool CheckIfPressed(float x, float y);
 	~Button();
 
 };

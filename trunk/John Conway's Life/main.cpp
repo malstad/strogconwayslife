@@ -7,8 +7,6 @@ const int SCREEN_HEIGHT = 600;
 const int SCREEN_BPP = 32;
 SDL_Event g_seEvent;					// receives event information
 SDL_Surface* g_ssScreen = NULL;			// the main screen
-SDL_Rect g_srPlayButton;				// play button that starts the simulation
-SDL_Rect g_srStopButton;				// stop button that stops the simulation
 
 void handleMouseEvents(Grid &PlayingGrid);
 void Update(Grid &PlayingGrid, bool isPlaying);
@@ -60,8 +58,7 @@ void handleMouseEvents(Grid &PlayingGrid)
 		CoordX = g_seEvent.button.x;
 		CoordY = g_seEvent.button.y;
 
-		if(PlayingGrid.isWithinBounds(CoordX, CoordY))
-			PlayingGrid.LocateAndFlipCell(CoordX, CoordY);
+		PlayingGrid.HandleMouseInput(CoordX, CoordY);
 
 	}
 }

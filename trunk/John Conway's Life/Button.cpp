@@ -5,6 +5,8 @@
 //also a bool that determines whether the button is the play button or the stop button
 Button::Button(int buttonType, int ScreenWidth, int ScreenHeight)
 {
+	isPressed = false;
+
 	//set the type of the button (play, stop)
 	type = buttonType;
 
@@ -41,6 +43,15 @@ Button::Button(int buttonType, int ScreenWidth, int ScreenHeight)
 void Button::Draw(SDL_Surface* Screen)
 {
 	applySurface(xOffset, yOffset, SpriteSheet, Screen, &m_srClip[type]);
+}
+
+bool Button::CheckIfPressed(float x, float y)
+{
+	if(x >= xOffset && x <= width + xOffset &&
+		y >= yOffset && y <= height + yOffset)
+		return true;
+
+	else return false;
 }
 
 Button::~Button()
