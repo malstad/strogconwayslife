@@ -1,5 +1,4 @@
-#include "Grid.h"
-#include "Button.h"
+#include "Game.h"
 
 //globals
 const int SCREEN_WIDTH = 800;
@@ -15,31 +14,31 @@ int main(int argc, char** argv)
 {
 
 	//attempts to initialize SDL, and quits if failed
-	if(!init(g_ssScreen, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP))
-		return 1;
+	/*if(!init(g_ssScreen, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP))
+		return 1;*/
 
-	bool toQuit = false;
-	bool isPlaying = false;
-	Grid PlayingGrid;
-	Button PlayButton(PLAY_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT);
-	Button StopButton(STOP_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT);
+	if(!initSDL())
+	{
+		return 1;
+	}
+
+	//bool toQuit = false;
+	Game Life;
+	//bool isPlaying = false;
+	//Grid PlayingGrid;
+	//Button PlayButton(PLAY_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//Button StopButton(STOP_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	//main game loop
-	while(!toQuit)
+	while(!Life.toQuit)
 	{
-		//message loop
-		while(SDL_PollEvent(&g_seEvent))
-		{
-			handleMouseEvents(PlayingGrid);
-			if(g_seEvent.type == SDL_QUIT)
-			{
-				toQuit = true;
-			}
-		}
-		PlayingGrid.Draw(g_ssScreen);
-		PlayButton.Draw(g_ssScreen);
-		StopButton.Draw(g_ssScreen);
-		Update(PlayingGrid, isPlaying);
+		Life.Draw();
+		Life.HandleInput();
+		Life.Update();
+		//PlayingGrid.Draw(g_ssScreen);
+		//PlayButton.Draw(g_ssScreen);
+		//StopButton.Draw(g_ssScreen);
+		//Update(PlayingGrid, isPlaying);
 	}
 
 	SDL_Quit();

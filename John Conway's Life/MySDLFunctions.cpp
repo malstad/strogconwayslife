@@ -1,14 +1,9 @@
 #include "MySDLFunctions.h"
 
-bool init(SDL_Surface* &screen, int SCREEN_WIDTH, int SCREEN_HEIGHT, int SCREEN_BPP)
+bool initSDL()
 {
 	//initialize all subsytems
 	if(-1 == SDL_Init(SDL_INIT_EVERYTHING))
-		return false;
-
-	//initialize screen
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
-	if(NULL == screen)	//if there was an error, return false
 		return false;
 
 	SDL_WM_SetCaption("John Conway's Game of Life", NULL);

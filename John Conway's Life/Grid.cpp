@@ -32,7 +32,7 @@ Grid::Grid(): m_nBuffers(2),
 	}
 
 	//load the file for the sprite sheet for a cell on the grid
-	m_ssCellSprites = loadFile("sprites.png");
+	m_ssCellSprites = loadFile("newSprites.png");
 
 	// setup the offset for the display grid
 	m_srDisplayOffset.x = 50;
@@ -63,18 +63,26 @@ void Grid::Draw(SDL_Surface* Screen)
 	alive.w = m_cellWidth;
 	alive.h = m_cellHeight;
 
+
 	for(int r = 0; r < m_nRows; r++)
 	{
 		for(int c = 0; c < m_nColumns; c++)
 		{
+			//SDL_Rect tempRect = {(c * 10) + m_srDisplayOffset.x, (r * 10) + m_srDisplayOffset.y, 10, 10};
+
 			//determine what color to fill the current cell with
 			if(m_grids[m_DrawBuffer][r][c])
+			{
 				currentClip = alive;
+			}
+				
 			else 
+			{
 				currentClip = dead;
+			}
 
 			//apply the current cell to the screen
-			applySurface(m_srDisplayOffset.x, m_srDisplayOffset.y, m_ssCellSprites, Screen, &currentClip);
+			applySurface(m_srDisplayOffset.x, m_srDisplayOffset.y, m_ssCellSprites, Screen, &currentClip);  
 
 			m_srDisplayOffset.x += m_cellWidth;	//increment horizontal offset
 		}

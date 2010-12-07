@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game(): toQuit(false),
-			  m_isPlaying(true),
+			  m_isPlaying(false),
 			  m_ssScreen(NULL),
 			  SCREEN_WIDTH(800),
 			  SCREEN_HEIGHT(600),
@@ -9,7 +9,9 @@ Game::Game(): toQuit(false),
 			  m_bPlay(PLAY_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT),
 			  m_bStop(STOP_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT)
 {
-	if(!init(m_ssScreen, SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP))
+	//initialize screen
+	m_ssScreen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
+	if(NULL == m_ssScreen)	//if there was an error, flag program to quit
 		toQuit = true;
 }
 
@@ -50,7 +52,8 @@ void Game::HandleInput()
 void Game::Update()
 {
 	//updates all drawn objects to the screen
-	m_gCellGrid.Update();
+	if(m_isPlaying)
+		m_gCellGrid.Update();
 	//m_bPlay.Update();
 	//m_bStop.Update();
 
