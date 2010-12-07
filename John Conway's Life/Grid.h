@@ -7,6 +7,8 @@ class Grid
 {
 protected:
 	int m_nBuffers;						// number of buffers the grid will use
+	int m_DrawBuffer;					// variable holding the value of what buffer will be drawn to screen
+	int m_LogicBuffer;					// variable holding the value of what buffer the logic will be written to
 	int m_nRows;						// number of rows the grid will have
 	int m_nColumns;						// number of coulumns the grid will have
 	int m_cellWidth;					// width of a cell in the grid
@@ -22,8 +24,8 @@ protected:
 public:
 	Grid();
 	void Draw(SDL_Surface* Screen);
-	void LocateAndFlipCell(float x, float y);
-	bool isWithinBounds(float x, float y);
+	bool HandleMouseInput(float x, float y);
+	void Update();
 	//get functions
 	SDL_Rect getCellSpecs() { return m_srCellSpecs; }
 	SDL_Rect getMainRectOffset() { return m_srDisplayOffset; }

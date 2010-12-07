@@ -5,14 +5,16 @@ Grid::Grid(): m_nBuffers(2),
 				m_nColumns(63), 
 				m_cellWidth(11), 
 				m_cellHeight(10),
-				m_ssDisplaySurface(NULL)
+				m_ssDisplaySurface(NULL),
+				m_DrawBuffer(0),
+				m_LogicBuffer(1)
 {
-	//allocate the array
-	m_grids = new bool**[m_nBuffers];	//creates an array of length m_nBuffers of pointers to pointers to bools
+	//allocate the array		
+	m_grids = new bool**[m_nBuffers];				//creates an array of length m_nBuffers of pointers to pointers to bools
 	for(int b = 0; b < m_nBuffers; b++)
 	{
-		m_grids[b] = new bool*[m_nRows];	//creates an array of length m_nRows of pointers to bools
-		for(int r = 0; r < m_nRows; r++)
+		m_grids[b] = new bool*[m_nRows];			//creates an array of length m_nRows of pointers to bools
+		for(int r = 0; r < m_nRows; r++)	
 		{
 			m_grids[b][r] = new bool[m_nColumns];	//creates an array of length m_nColumns of bools
 		}
@@ -24,7 +26,7 @@ Grid::Grid(): m_nBuffers(2),
 		{
 			for(int c = 0; c < m_nColumns; c++)
 			{
-				m_grids[b][r][c] = false;		//initialize all bools on both grids to be false
+				m_grids[b][r][c] = false;		// initialize all bools on both grids to be false
 			}
 		}
 	}
@@ -66,7 +68,7 @@ void Grid::Draw(SDL_Surface* Screen)
 		for(int c = 0; c < m_nColumns; c++)
 		{
 			//determine what color to fill the current cell with
-			if(m_grids[0][r][c])
+			if(m_grids[m_DrawBuffer][r][c])
 				currentClip = alive;
 			else 
 				currentClip = dead;
@@ -85,8 +87,12 @@ void Grid::Draw(SDL_Surface* Screen)
 	//return m_ssDisplaySurface;
 }
 
-void Grid::LocateAndFlipCell(float x, float y)
+bool Grid::HandleMouseInput(float x, float y)
 {
+	if(x >= m_srDisplayOffset.x && x <= m_srDisplayGrid.w + m_srDisplayOffset.x &&
+		y >= m_srDisplayOffset.y && y <= m_srDisplayGrid.h + m_srDisplayOffset.y)
+	{
+	
 		SDL_Rect cellPos;
 
 		//determine the xy position of the cell that was clicked
@@ -96,25 +102,40 @@ void Grid::LocateAndFlipCell(float x, float y)
 		x /= m_srCellSpecs.x;
 		y /= m_srCellSpecs.y;
 
-		cellPos.x = (Sint16)x;
-		cellPos.y = (Sint16)y;
+		cellPos.x = (int)x;
+		cellPos.y = (int)y;
 
 		//if current cell is set to true, set it to false, else set it to true
 		if(m_grids[0][cellPos.y][cellPos.x])
 			m_grids[0][cellPos.y][cellPos.x] = false;
 		else
 			m_grids[0][cellPos.y][cellPos.x] = true;
-}
 
-bool Grid::isWithinBounds(float x, float y)
-{
-	if(x < m_srDisplayOffset.x || x > m_srDisplayGrid.w + m_srDisplayOffset.x ||
-		y < m_srDisplayOffset.y || y > m_srDisplayGrid.h + m_srDisplayOffset.y)
-	{
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
+}
+
+void Grid::Update()
+{
+	//this is only to be called when Game's m_isPlaying = true
+	//responsible for going through game logic, and then afterwards switch the buffers DRAW and LOGIC
+
+	//game logic
+
+
+	//switch buffers
+	if(m_DrawBuffer)
+	{
+		m_DrawBuffer = 0;
+		m_LogicBuffer = 1;
+	}
+	else
+	{
+		m_DrawBuffer = 1;
+		m_LogicBuffer = 0;
+	}
 }
 
 Grid::~Grid()
@@ -131,7 +152,6 @@ Grid::~Grid()
 	}
 
 	delete [] m_grids;
-
 
 	SDL_FreeSurface(m_ssCellSprites);
 }
