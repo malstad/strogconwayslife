@@ -23,7 +23,8 @@ private:
 	SDL_Rect		m_srClip[4];
 
 public:
-	Button(int buttonType, int ScreenWidth, int ScreenHeight);
+	Button();
+	bool Initializer(int buttonType, int ScreenWidth, int ScreenHeight);
 	void Draw(SDL_Surface* Screen);
 	bool CheckIfPressed(float x, float y);
 	~Button();

@@ -5,13 +5,18 @@ Game::Game(): toQuit(false),
 			  m_ssScreen(NULL),
 			  SCREEN_WIDTH(800),
 			  SCREEN_HEIGHT(600),
-			  SCREEN_BPP(32),
-			  m_bPlay(PLAY_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT),
-			  m_bStop(STOP_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT)
+			  SCREEN_BPP(32)
 {
 	//initialize screen
 	m_ssScreen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE);
 	if(NULL == m_ssScreen)	//if there was an error, flag program to quit
+		toQuit = true;
+
+	if(!m_gCellGrid.Initializer())
+		toQuit = true;
+	if(!m_bPlay.Initializer(PLAY_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT))
+		toQuit = true;
+	if(!m_bStop.Initializer(STOP_UNPRESSED, SCREEN_WIDTH, SCREEN_HEIGHT))
 		toQuit = true;
 }
 

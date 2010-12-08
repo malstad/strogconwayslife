@@ -23,6 +23,7 @@ protected:
 
 public:
 	Grid();
+	bool Initializer();
 	void Draw(SDL_Surface* Screen);
 	bool HandleMouseInput(float x, float y);
 	void Update();
