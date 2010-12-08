@@ -214,11 +214,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\buttons.png"
+				RelativePath=".\buttons.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\sprites.png"
+				RelativePath=".\sprites.bmp"
 				>
 			</File>
 			<Filter
@@ -258,6 +258,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

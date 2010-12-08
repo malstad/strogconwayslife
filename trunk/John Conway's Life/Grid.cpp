@@ -6,6 +6,7 @@ Grid::Grid(): m_nBuffers(2),
 				m_cellWidth(11), 
 				m_cellHeight(10),
 				m_ssDisplaySurface(NULL),
+				m_ssCellSprites(NULL),
 				m_DrawBuffer(0),
 				m_LogicBuffer(1)
 {
@@ -32,7 +33,7 @@ Grid::Grid(): m_nBuffers(2),
 	}
 
 	//load the file for the sprite sheet for a cell on the grid
-	m_ssCellSprites = loadFile("sprites.png");
+	//m_ssCellSprites = loadFile("sprites.bmp");
 
 	// setup the offset for the display grid
 	m_srDisplayOffset.x = 50;
@@ -47,6 +48,15 @@ Grid::Grid(): m_nBuffers(2),
 	// setup the size of a cell
 	m_srCellSpecs.x = 11;
 	m_srCellSpecs.y = 10;
+}
+
+bool Grid::Initializer()
+{
+	m_ssCellSprites = loadFile("sprites.bmp");
+	if(m_ssCellSprites == NULL)
+		return false;
+
+	return true;
 }
 
 void Grid::Draw(SDL_Surface* Screen)
@@ -91,8 +101,6 @@ void Grid::Draw(SDL_Surface* Screen)
 	}
 
 	m_srDisplayOffset.y = 20;					// after drawing all vertical lines, reset vertical offset
-
-	//return m_ssDisplaySurface;
 }
 
 bool Grid::HandleMouseInput(float x, float y)
