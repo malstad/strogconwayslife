@@ -30,11 +30,6 @@ public:
 	void Draw(SDL_Surface* Screen);
 	bool HandleMouseInput(float x, float y);
 	void Update();
-	bool CheckCell(int sourceBuffer, int r, int c);
-	//get functions
-	SDL_Rect getCellSpecs() { return m_srCellSpecs; }
-	SDL_Rect getMainRectOffset() { return m_srDisplayOffset; }
-	SDL_Rect getMainRect() { return m_srDisplayGrid; }
 	~Grid();							//destructor
 };
 

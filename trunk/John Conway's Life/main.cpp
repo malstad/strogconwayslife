@@ -2,19 +2,19 @@
 
 int main(int argc, char** argv)
 {
-	if(!initSDL())
+	if(!initSDL())			//initialize SDL
 		return 1;
 
-	Game Life;
+	Game Life;				//initialize game
 	
 	//main game loop
 	while(!Life.toQuit)
 	{
-		Life.Draw();
-		Life.HandleInput();
-		Life.Update();
+		Life.HandleInput();	//message loop
+		Life.Draw();		//draw screen
+		Life.Update();		//update game objects
 	}
 
-	SDL_Quit();
+	SDL_Quit();				//quit SDL
 	return 0;
 }

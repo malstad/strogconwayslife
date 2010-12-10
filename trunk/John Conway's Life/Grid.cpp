@@ -142,6 +142,7 @@ bool Grid::HandleMouseInput(float x, float y)
 
 void Grid::Update()
 {
+	Sleep(30);
 	//this is only to be called when Game's m_isPlaying = true
 	//responsible for going through game logic, and then afterwards copying the LOGIC buffer to the DRAW buffer
 
@@ -150,10 +151,10 @@ void Grid::Update()
 	{
 		for(int c = 0; c < m_nColumns; c++)
 		{
-			////determine how many cells around it are alive
+			// this code executed for every cell
 			int cellCount = 0;
 
-			cellCount = findCellNeighbors(c, r);
+			cellCount = findCellNeighbors(c, r); // determine the amount of neighbors the cell has
 
 			//determine whether cell should be on or off based on cellCount
 			if(m_grids[m_iDrawBuffer][r][c] == true)
@@ -161,16 +162,12 @@ void Grid::Update()
 				//if cell is alive, it dies if it has more than 3 neighbors, or less than 2
 				if(cellCount > 3 || cellCount < 2)
 					m_grids[m_iLogicBuffer][r][c] = false;
-				else
-					m_grids[m_iLogicBuffer][r][c] = true;
 			}
 			else
 			{
 				//if cell is dead, it is brought back to life only if it has exactly 3 neighbors
 				if(cellCount == 3)
 					m_grids[m_iLogicBuffer][r][c] = true;
-				else
-					m_grids[m_iLogicBuffer][r][c] = false;
 			}
 		}
 	}
@@ -182,20 +179,6 @@ void Grid::Update()
 		{
 			m_grids[m_iDrawBuffer][r][c] = m_grids[m_iLogicBuffer][r][c];
 		}
-	}
-
-	Sleep(80);
-}
-
-bool Grid::CheckCell(int sourceBuffer, int r, int c)
-{
-	if(m_grids[sourceBuffer][r][c] == true)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
 	}
 }
 
