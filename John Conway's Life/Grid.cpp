@@ -5,10 +5,11 @@ Grid::Grid(): m_nBuffers(2),
 				m_nColumns(63), 
 				m_cellWidth(11), 
 				m_cellHeight(10),
-				m_ssDisplaySurface(NULL),
+				//m_ssDisplaySurface(NULL),
 				m_ssCellSprites(NULL),
-				m_DrawBuffer(0),
-				m_LogicBuffer(1)
+				//m_tempBuffer(NULL),
+				m_iDrawBuffer(0),
+				m_iLogicBuffer(1)
 {
 	//allocate the array		
 	m_grids = new bool**[m_nBuffers];				//creates an array of length m_nBuffers of pointers to pointers to bools
@@ -81,7 +82,7 @@ void Grid::Draw(SDL_Surface* Screen)
 			//SDL_Rect tempRect = {(c * 10) + m_srDisplayOffset.x, (r * 10) + m_srDisplayOffset.y, 10, 10};
 
 			//determine what color to fill the current cell with
-			if(m_grids[m_DrawBuffer][r][c])
+			if(m_grids[0][r][c])
 			{
 				currentClip = alive;
 			}
@@ -122,10 +123,16 @@ bool Grid::HandleMouseInput(float x, float y)
 		cellPos.y = (int)y;
 
 		//if current cell is set to true, set it to false, else set it to true
-		if(m_grids[0][cellPos.y][cellPos.x])
-			m_grids[0][cellPos.y][cellPos.x] = false;
+		if(m_grids[m_iDrawBuffer][cellPos.y][cellPos.x])
+		{
+			m_grids[m_iDrawBuffer][cellPos.y][cellPos.x] = false;
+			m_grids[m_iLogicBuffer][cellPos.y][cellPos.x] = false;
+		}
 		else
-			m_grids[0][cellPos.y][cellPos.x] = true;
+		{
+			m_grids[m_iDrawBuffer][cellPos.y][cellPos.x] = true;
+			m_grids[m_iLogicBuffer][cellPos.y][cellPos.x] = true;
+		}
 
 		return true;
 	}
@@ -136,22 +143,78 @@ bool Grid::HandleMouseInput(float x, float y)
 void Grid::Update()
 {
 	//this is only to be called when Game's m_isPlaying = true
-	//responsible for going through game logic, and then afterwards switch the buffers DRAW and LOGIC
+	//responsible for going through game logic, and then afterwards copying the LOGIC buffer to the DRAW buffer
 
-	//game logic
-
-
-	//switch buffers
-	if(m_DrawBuffer)
+	// for each cell
+	for(int r = 0; r <m_nRows; r++)
 	{
-		m_DrawBuffer = 0;
-		m_LogicBuffer = 1;
+		for(int c = 0; c < m_nColumns; c++)
+		{
+			////determine how many cells around it are alive
+			int cellCount = 0;
+
+			cellCount = findCellNeighbors(c, r);
+
+			//determine whether cell should be on or off based on cellCount
+			if(m_grids[m_iDrawBuffer][r][c] == true)
+			{
+				//if cell is alive, it dies if it has more than 3 neighbors, or less than 2
+				if(cellCount > 3 || cellCount < 2)
+					m_grids[m_iLogicBuffer][r][c] = false;
+				else
+					m_grids[m_iLogicBuffer][r][c] = true;
+			}
+			else
+			{
+				//if cell is dead, it is brought back to life only if it has exactly 3 neighbors
+				if(cellCount == 3)
+					m_grids[m_iLogicBuffer][r][c] = true;
+				else
+					m_grids[m_iLogicBuffer][r][c] = false;
+			}
+		}
+	}
+
+	//draws the updated grid to the draw buffer
+	for(int r = 0; r < m_nRows; r++)
+	{
+		for(int c = 0; c < m_nColumns; c++)
+		{
+			m_grids[m_iDrawBuffer][r][c] = m_grids[m_iLogicBuffer][r][c];
+		}
+	}
+
+	Sleep(80);
+}
+
+bool Grid::CheckCell(int sourceBuffer, int r, int c)
+{
+	if(m_grids[sourceBuffer][r][c] == true)
+	{
+		return true;
 	}
 	else
 	{
-		m_DrawBuffer = 1;
-		m_LogicBuffer = 0;
+		return false;
 	}
+}
+
+int Grid::findCellNeighbors(int xPos, int yPos)
+{
+	int neighbors = 0;
+	for(int y = -1; y < 2; y++)
+	{
+		for(int x = -1; x < 2; x++)
+		{
+			if(!(x == 0 && y == 0) && 
+				(x+xPos >= 0 && x+xPos < m_nColumns && y+yPos >= 0 && y+yPos < m_nRows) && 
+				 m_grids[m_iDrawBuffer][y+yPos][x+xPos])
+			{
+				neighbors++;
+			}
+		}
+	}
+	return neighbors;
 }
 
 Grid::~Grid()

@@ -11,7 +11,7 @@ Button::Button()
 	//SpriteSheet = loadFile("buttons.png");
 
 	//set the size and offset of each clip
-	for(int i = 0; i < SIZE; i++)
+	for(int i = 0; i < BUTTON_TYPES; i++)
 	{
 		m_srClip[i].h = 40;
 		m_srClip[i].w = 80;

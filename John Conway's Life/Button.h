@@ -9,7 +9,7 @@ enum ButtonTypes
 	PLAY_PRESSED,
 	STOP_UNPRESSED,
 	STOP_PRESSED,
-	SIZE
+	BUTTON_TYPES
 };
 
 class Button
