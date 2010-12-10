@@ -2,6 +2,7 @@
 
 Game::Game(): toQuit(false),
 			  m_isPlaying(false),
+			  m_bMouseDown(false),
 			  m_ssScreen(NULL),
 			  SCREEN_WIDTH(800),
 			  SCREEN_HEIGHT(600),
@@ -40,12 +41,25 @@ void Game::HandleInput()
 		// if the user left clicks
 		if(m_seEvent.type == SDL_MOUSEBUTTONDOWN && m_seEvent.button.button == SDL_BUTTON_LEFT)
 		{
+			m_bMouseDown = true;
+		}
+
+		else if(m_seEvent.type == SDL_MOUSEBUTTONUP && m_seEvent.button.button == SDL_BUTTON_LEFT)
+		{
+			m_bMouseDown = false;
+		}
+
+		if(m_bMouseDown)
+		{
 			float CoordX, CoordY;
 			
 			CoordX = m_seEvent.button.x;
 			CoordY = m_seEvent.button.y;
 
-			m_gCellGrid.HandleMouseInput(CoordX, CoordY);
+			if(!m_gCellGrid.HandleMouseInput(CoordX, CoordY))
+			{
+				m_bMouseDown = false;
+			}
 			if(m_bPlay.CheckIfPressed(CoordX, CoordY))
 				m_isPlaying = true;
 			else if(m_bStop.CheckIfPressed(CoordX, CoordY))
@@ -59,8 +73,6 @@ void Game::Update()
 	//updates all drawn objects to the screen
 	if(m_isPlaying)
 		m_gCellGrid.Update();
-	//m_bPlay.Update();
-	//m_bStop.Update();
 
 	//flip the screen
 	SDL_Flip(m_ssScreen);
