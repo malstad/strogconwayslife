@@ -13,6 +13,7 @@ private:
 	Button m_bPlay;							// play button
 	Button m_bStop;							// stop button
 	bool m_isPlaying;						// flag used to have the game simulate
+	bool m_bMouseDown;						// flag to show that user wants to draw onto screen
 	const int SCREEN_WIDTH;					// width of the screen
 	const int SCREEN_HEIGHT;				// height of the screen
 	const int SCREEN_BPP;					// bits per pixel
