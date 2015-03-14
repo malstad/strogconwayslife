@@ -1,0 +1,1 @@
+This is my first attempt at to create a working version of John Conway's Game of Life. It's also the first time I've used SDL for a project, so I'm learning as I go.
